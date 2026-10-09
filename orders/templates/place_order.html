@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order placed</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            background: #f3f5f4;
+            color: #1f2a28;
+            line-height: 1.5;
+            padding: 32px 16px;
+        }
+
+        .order {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid #dde3e0;
+            overflow: hidden;
+        }
+
+        .order-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid #dde3e0;
+            background: #e8f1ee;
+        }
+
+        .order-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1d4a3f;
+        }
+
+        .order-header p {
+            color: #3d5a52;
+            font-size: 0.95rem;
+            margin-top: 2px;
+        }
+
+        .order-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 28px;
+            border-bottom: 1px solid #edf0ee;
+            font-size: 0.95rem;
+            color: #5d6b67;
+        }
+
+        .order-info strong {
+            color: #1f2a28;
+        }
+
+        .items {
+            list-style: none;
+            padding: 8px 28px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #edf0ee;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 600;
+        }
+
+        .item-meta {
+            color: #5d6b67;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 28px;
+            background: #f7f9f8;
+            border-top: 1px solid #dde3e0;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .actions {
+            padding: 20px 28px 28px;
+        }
+
+        .btn {
+            display: block;
+            padding: 13px 18px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            background: #1f6f5c;
+            color: #ffffff;
+            border: 2px solid #1f6f5c;
+        }
+
+        .btn:hover {
+            background: #185a4a;
+            border-color: #185a4a;
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid #f0b429;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 480px) {
+            .order-info {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="order">
+        <div class="order-header">
+            <h1>Order placed</h1>
+            <p>Thank you, your order has been received.</p>
+        </div>
+
+        <div class="order-info">
+            <span>Order number: <strong>#{{ order.id }}</strong></span>
+            <span>Status: <strong>{{ order.status }}</strong></span>
+        </div>
+
+        <ul class="items">
+            {% for item in order_items %}
+            <li class="item">
+                <div>
+                    <div class="item-name">{{ item.product.name }}</div>
+                    <div class="item-meta">Quantity: {{ item.quantity }}</div>
+                </div>
+                <div class="item-price">₹{{ item.price }} each</div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="total">
+            <span>Total</span>
+            <span>₹{{ order.total_amount }}</span>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'home' %}" class="btn">Continue shopping</a>
+        </div>
+    </main>
+</body>
+</html>

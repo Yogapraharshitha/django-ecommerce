@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .detail { display:flex; gap:32px; flex-wrap:wrap; background:#fff; padding:28px;
+            border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+  .detail .image { flex:1 1 320px; }
+  .detail .image img, .detail .image .no-image { width:100%; max-height:420px; object-fit:cover;
+                                                 border-radius:10px; display:block; }
+  .detail .image .no-image { height:300px; display:flex; align-items:center; justify-content:center;
+                             background:#eee; color:#999; }
+  .detail .info { flex:1 1 320px; }
+  .detail h1 { margin:0 0 8px; }
+  .category { color:#777; margin-bottom:12px; }
+  .price { font-size:28px; font-weight:bold; color:#0d6efd; margin-bottom:10px; }
+  .stock { margin-bottom:16px; color:#198754; font-weight:600; }
+  .stock.out { color:#dc3545; }
+  .desc { color:#444; line-height:1.6; margin-bottom:22px; }
+  .btn { display:inline-block; padding:12px 28px; border-radius:8px; background:#0d6efd;
+         color:#fff; text-decoration:none; font-weight:bold; }
+  .btn:hover { background:#0b5ed7; }
+  .btn.disabled { background:#ccc; pointer-events:none; }
+  .back { display:inline-block; margin-top:20px; color:#0d6efd; text-decoration:none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="detail">
+    <div class="image">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+        <div class="no-image">No image</div>
+      {% endif %}
+    </div>
+
+    <div class="info">
+      <h1>{{ product.name }}</h1>
+      <div class="category">Category: {{ product.category }}</div>
+      <div class="price">₹{{ product.price }}</div>
+
+      {% if product.stock > 0 %}
+        <div class="stock">In stock ({{ product.stock }} available)</div>
+      {% else %}
+        <div class="stock out">Out of stock</div>
+      {% endif %}
+
+      <p class="desc">{{ product.description }}</p>
+
+      {% if product.stock > 0 %}
+        <a class="btn" href="{% url 'add_to_cart' product.id %}">Add to Cart</a>
+      {% else %}
+        <a class="btn disabled" href="#">Add to Cart</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <a class="back" href="{% url 'product_list' %}">← Back to products</a>
+</div>
+{% endblock %}

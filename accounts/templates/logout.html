@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #f4f5f7;
+            margin: 0;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .logout-card {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 36px 28px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.1);
+            text-align: center;
+        }
+
+        .check {
+            width: 72px; height: 72px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #e6f6ea; color: #1d6b34;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; font-weight: 700;
+        }
+
+        .logout-card h1 { margin: 0 0 8px; font-size: 24px; }
+        .logout-card p { margin: 0 0 26px; color: #777; font-size: 15px; }
+
+        .login-btn {
+            display: block;
+            background: #2a6df4; color: #fff;
+            padding: 13px; border-radius: 8px;
+            font-size: 16px; font-weight: 600;
+            text-decoration: none;
+            transition: background .2s;
+        }
+        .login-btn:hover { background: #1c55c9; }
+    </style>
+</head>
+<body>
+    <div class="logout-card">
+        <div class="check">✓</div>
+        <h1>Logged out successfully</h1>
+        <p>You have been signed out. See you again soon!</p>
+        <a href="{% url 'login' %}" class="login-btn">Login again</a>
+    </div>
+</body>
+</html>

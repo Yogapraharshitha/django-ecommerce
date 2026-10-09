@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block extra_css %}
+<style>
+    .checkout { max-width: 700px; margin: 0 auto; }
+    .items { list-style: none; padding: 0; margin: 0 0 16px; }
+    .item {
+        display: flex; justify-content: space-between; align-items: center;
+        background: #fff; padding: 14px 18px; margin-bottom: 10px;
+        border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .item-name { font-weight: 600; }
+    .item-meta { color: #777; font-size: 14px; }
+    .total {
+        display: flex; justify-content: space-between;
+        background: #fff; padding: 16px 18px; border-radius: 10px;
+        font-size: 20px; font-weight: bold; margin-bottom: 16px;
+    }
+    .actions { display: flex; justify-content: space-between; align-items: center; }
+    .btn { padding: 12px 24px; border-radius: 8px; font-size: 16px; text-decoration: none; border: none; cursor: pointer; }
+    .btn-secondary { background: #fff; color: #2a6df4; border: 1px solid #2a6df4; }
+    .btn-primary { background: #198754; color: #fff; font-weight: bold; }
+    .btn-primary:hover { background: #157347; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <main class="checkout">
+    <h1>Checkout</h1>
+    <p>Check your items, then place the order.</p>
+
+    <ul class="items">
+      {% for item in cart_items %}
+      <li class="item">
+        <div>
+          <div class="item-name">{{ item.products.name }}</div>
+          <div class="item-meta">Quantity: {{ item.quantity }}</div>
+        </div>
+        <div>₹{{ item.products.price }} each</div>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="total">
+      <span>Total</span>
+      <span>₹{{ total }}</span>
+    </div>
+
+    <div class="actions">
+      <a href="{% url 'cart' %}" class="btn btn-secondary">Back to cart</a>
+
+      <form method="post" action="{% url 'place_order' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Place order</button>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}

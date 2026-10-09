@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-item {
+        display: flex; align-items: center; gap: 20px;
+        background: #fff; padding: 16px; margin-bottom: 14px;
+        border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .cart-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+    .item-info { flex: 1; }
+    .item-info h3 { margin: 0 0 6px; }
+    .item-info p { margin: 2px 0; color: #555; }
+    .subtotal { font-weight: 600; color: #222 !important; }
+
+    .qty { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .qty form { margin: 0; }
+    .qty-btn {
+        width: 32px; height: 32px; border: 1px solid #ccc; background: #fff;
+        border-radius: 50%; font-size: 18px; line-height: 1; cursor: pointer;
+    }
+    .qty-btn:hover { background: #f0f0f0; }
+    .qty-num { min-width: 24px; text-align: center; font-weight: 600; }
+
+    .remove-btn {
+        background: #fff; color: #d62828; border: 1px solid #d62828;
+        padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    }
+    .remove-btn:hover { background: #d62828; color: #fff; }
+
+    .total-box {
+        background: #fff; padding: 18px 20px; border-radius: 12px;
+        display: flex; justify-content: space-between; align-items: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .total-box h3 { margin: 0; }
+    .checkout-btn {
+        background: #2a6df4; color: #fff; padding: 10px 22px;
+        border-radius: 8px; font-size: 16px; text-decoration: none;
+    }
+    .checkout-btn:hover { background: #1c55c9; }
+    .empty { text-align: center; padding: 40px; background: #fff; border-radius: 12px; }
+
+    @media (max-width: 560px) { .cart-item { flex-wrap: wrap; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <h1>Your Cart</h1>
+
+    {% for item in cart_items %}
+        <div class="cart-item">
+            {% if item.products.image %}
+                <img src="{{ item.products.image.url }}" alt="{{ item.products.name }}">
+            {% endif %}
+
+            <div class="item-info">
+                <h3>{{ item.products.name }}</h3>
+                <p>Price: ₹{{ item.products.price }}</p>
+                <p class="subtotal">Subtotal: ₹{{ item.subtotal }}</p>
+
+                <div class="qty">
+                    <form method="post" action="{% url 'decrease_quantity' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="qty-btn">−</button>
+                    </form>
+
+                    <span class="qty-num">{{ item.quantity }}</span>
+
+                    <form method="post" action="{% url 'increase_quantity' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="qty-btn">+</button>
+                    </form>
+                </div>
+            </div>
+
+            <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="remove-btn">Remove</button>
+            </form>
+        </div>
+    {% empty %}
+        <div class="empty">Your cart is empty.</div>
+    {% endfor %}
+
+    {% if cart_items %}
+        <div class="total-box">
+            <h3>Total: ₹{{ total }}</h3>
+            <a href="{% url 'checkout' %}" class="checkout-btn">Checkout</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
