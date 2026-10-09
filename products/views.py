@@ -1,18 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from .models import Products
 
-# Create your views here.
+
 def product_list(request):
-    products=Products.objects.all()
-    context={
-        'products':products
-    }
-    return render(request,'product_list.html',context)
+    query = request.GET.get('q', '').strip()
+    products = Products.objects.all().order_by('-id')
 
-def product_details(request,id):
-    product=Products.objects.get(id=id)   
-    context={
-        'product':product
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) |
+            Q(category__icontains=query)
+        )
 
+    context = {
+        'products': products,
+        'query': query,
     }
-    return render(request,'product_detail.html',context)
+    return render(request, 'product_list.html', context)
+
+
+def product_details(request, id):
+    product = get_object_or_404(Products, id=id)
+    context = {
+        'product': product
+    }
+    return render(request, 'product_detail.html', context)
